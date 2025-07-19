@@ -1,5 +1,5 @@
 
-name: My First GitHub Actions
+name: My First GitHub Actions (Java)
 
 on: [push]
 
@@ -7,23 +7,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version: [ 3.9]
-
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'   # AdoptOpenJDK Temurin is commonly used
+        java-version: '17'         # You can change this to 8, 11, 21, etc.
+
+    - name: Build with Maven
+      run: mvn clean install
 
     - name: Run tests
-      run: |
-        cd src
-        python -m pytest addition.py
+      run: mvn test
+
